@@ -1,28 +1,21 @@
--------------------------------------------------------------------------------------------------------------------
--- Setup functions for this job.  Generally should not be modified.
--------------------------------------------------------------------------------------------------------------------
-
--- Initialization function for this job file.
 function get_sets()
     mote_include_version = 2
 
-	-- Load and initialize the include file.
 	include('Mote-Include.lua')
 end
 
 
 function job_setup()
+		
+		include('Land-Include.lua')
 
-	state.Buff['Mighty Strikes']    = buffactive['Mighty Strikes'] or false
-	state.Buff['Warrior\'s Charge'] = buffactive['Warrior\'s Charge'] or false
+		state.Buff['Mighty Strikes']    = buffactive['Mighty Strikes'] or false
+		state.Buff['Warrior\'s Charge'] = buffactive['Warrior\'s Charge'] or false
+	
+		initialize_job()
 
 end
 
--------------------------------------------------------------------------------------------------------------------
--- User setup functions for this job.  Recommend that these be overridden in a sidecar file.
--------------------------------------------------------------------------------------------------------------------
-
--- Setup vars that are user-dependent.  Can override this function in a sidecar file.
 function user_setup()
 	state.OffenseMode:options('Normal', 'Acc')
 	state.RangedMode:options('Normal')
@@ -36,21 +29,15 @@ function user_setup()
 	
 	send_command('bind f9 gs c cycle OffenseMode')
 	send_command('bind f10 gs c cycle WeaponskillMode')
-        
-        select_default_macro_book()
+
 end
 
 
--- Called when this job file is unloaded (eg: job change)
 function user_unload()
 
 end
 
 function init_gear_sets()
-
-	--------------------------------------
-        -- Start defining the sets
-        --------------------------------------
         
         -- Fast cast sets for spells
         sets.precast.FC = {waist="Velocious Belt",ear2="Loquacious Earring"}
@@ -59,16 +46,16 @@ function init_gear_sets()
         -- Weaponskill sets
         -- Default set for any weaponskill that isn't any more specifically defined
         sets.precast.WS = {
-		head="Hecatomb Cap +1",neck="Fotia Gorget",ear1="Assault Earring",ear2="Brutal Earring",
-		body="Armada Hauberk",hands="Alkyoneus's Brc.",ring1="Flame Ring",ring2="Rajas Ring",
-		back="Cerberus Mantle +1",waist="Warwolf Belt",legs="Byakko's Haidate",feet="Hecatomb Leggings +1"}
+			head="Hecatomb Cap +1",neck="Fotia Gorget",ear1="Assault Earring",ear2="Brutal Earring",
+			body="Armada Hauberk",hands="Alkyoneus's Brc.",ring1="Flame Ring",ring2="Rajas Ring",
+			back="Cerberus Mantle +1",waist="Warwolf Belt",legs="Byakko's Haidate",feet="Hecatomb Leggings +1"}
 		
         sets.precast.WS.Acc = {
-		head="Hecatomb Cap +1",neck="Fotia Gorget",ear1="Assault Earring",ear2="Brutal Earring",
-		body="Armada Hauberk",hands="Hct. Mitts +1",ring1="Sniper Ring +1",ring2="Rajas Ring",
-		back="Cuchulain's Mantle",waist="Potent Belt",legs="Byakko's Haidate",feet="Hecatomb Leggings +1"}
+			head="Hecatomb Cap +1",neck="Fotia Gorget",ear1="Assault Earring",ear2="Brutal Earring",
+			body="Armada Hauberk",hands="Hct. Mitts +1",ring1="Sniper Ring +1",ring2="Rajas Ring",
+			back="Cuchulain's Mantle",waist="Potent Belt",legs="Byakko's Haidate",feet="Hecatomb Leggings +1"}
 		
-	sets.precast.WS.Cap = {}
+		sets.precast.WS.Cap = {}
 
         -- Specific weaponskill sets. Uses the base set if an appropriate WSMod version isn't found.
         sets.precast.WS['Raging Rush'] = set_combine(sets.precast.WS, {waist="Potent Belt"})
@@ -93,10 +80,10 @@ function init_gear_sets()
         sets.idle = {
         	ammo="Bibiki seashell",
         	neck="Chocobo whistle",ear1="Assault Earring",ear2="Brutal Earring",
-		head="Genbu's Kabuto",body="Valhalla Breastplate",hands="Heavy Gauntlets",ring1="Jelly Ring",ring2="Bloodbead Ring",
-		back="Shadow Mantle",waist="Velocious Belt",legs="Crimson Cuisses",feet="Hermes' Sandals"}
+			head="Genbu's Kabuto",body="Valhalla Breastplate",hands="Heavy Gauntlets",ring1="Jelly Ring",ring2="Bloodbead Ring",
+			back="Shadow Mantle",waist="Velocious Belt",legs="Crimson Cuisses",feet="Hermes' Sandals"}
 		
-	sets.idle.Town = set_combine(sets.idle,{ring1="Warp ring",back="Nexus cape"})
+		sets.idle.Town = set_combine(sets.idle,{ring1="Warp ring",back="Nexus cape"})
         
         -- Defense sets
         sets.defense.PDT = {}
@@ -108,48 +95,48 @@ function init_gear_sets()
         -- Default melee group
         sets.engaged = {
         	ammo="Fire Bomblet",
-		head="Walahra Turban",neck="Peacock Amulet",ear1="Assault Earring",ear2="Brutal Earring",
-		body="Armada Hauberk",hands="Dusk Gloves +1",ring1="Sniper's Ring +1",ring2="Rajas Ring",
-		back="Cerberus Mantle +1",waist="Velocious Belt",legs="Byakko's Haidate",feet="Unicorn Leggings"}
+			head="Walahra Turban",neck="Peacock Amulet",ear1="Assault Earring",ear2="Brutal Earring",
+			body="Armada Hauberk",hands="Dusk Gloves +1",ring1="Sniper's Ring +1",ring2="Rajas Ring",
+			back="Cerberus Mantle +1",waist="Velocious Belt",legs="Byakko's Haidate",feet="Unicorn Leggings"}
 		
         sets.engaged.Acc = set_combine(sets.engaged,{})
         
-	sets.engaged.Tank = set_combine(sets.engaged,{ammo="Bibiki seashell",back="Shadow mantle",ring2="Defending ring"})
+		sets.engaged.Tank = set_combine(sets.engaged,{ammo="Bibiki seashell",back="Shadow mantle",ring2="Defending ring"})
 
-	-- Bravura engaged (normal)
-        sets.engaged.Bravura = set_combine(sets.engaged,{})
+		-- Bravura engaged (normal)
+        sets.engaged.Bravura = set_combine(sets.engaged,{body="Aurum cuirass"})
 		
-        sets.engaged.Bravura.Acc  = set_combine(sets.engaged.Bravura,{})
+        sets.engaged.Bravura.Acc  = set_combine(sets.engaged.Bravura,{ear1="Assault earring",back="Cuchulain's mantle",feet="Aurum sabatons"})
         
-	sets.engaged.Bravura.Tank = set_combine(sets.engaged.Bravura,{ammo="Bibiki seashell",back="Shadow mantle",ring2="Defending ring"})
+		sets.engaged.Bravura.Tank = set_combine(sets.engaged.Bravura,{ammo="Bibiki seashell",back="Shadow mantle",ring2="Defending ring"})
 		
-	-- Bravura engaged (SAM)
-	sets.engaged.Bravura.SAM = set_combine(sets.engaged.Bravura,{})
+		-- Bravura engaged (SAM)
+		sets.engaged.Bravura.SAM = set_combine(sets.engaged,{})
 
-	sets.engaged.Bravura.Acc.SAM = set_combine(sets.engaged.Bravura.SAM,{})
+		sets.engaged.Bravura.Acc.SAM = set_combine(sets.engaged.Bravura.SAM,{ear1="Assault earring",back="Cuchulain's mantle",feet="Aurum sabatons"})
 
-	-- ragnarok engaged (normal)
-	sets.engaged.Ragnarok = set_combine(sets.engaged,{})
+		-- ragnarok engaged (normal)
+		sets.engaged.Ragnarok = set_combine(sets.engaged,{})
 
-	sets.engaged.Ragnarok.Acc = set_combine(sets.engaged.Ragnarok,{})
+		sets.engaged.Ragnarok.Acc = set_combine(sets.engaged.Ragnarok,{})
 	
-	-- ragnarok engaged (SAM)                
-	sets.engaged.Ragnarok.SAM = set_combine(sets.engaged.Ragnarok,{})
+		-- ragnarok engaged (SAM)                
+		sets.engaged.Ragnarok.SAM = set_combine(sets.engaged.Ragnarok,{})
 		
-	sets.engaged.Ragnarok.Acc.SAM = set_combine(sets.engaged.Ragnarok.SAM,{})
+		sets.engaged.Ragnarok.Acc.SAM = set_combine(sets.engaged.Ragnarok.SAM,{})
 	
-	-- DW engaged (normal)
+		-- DW engaged (normal)
         sets.engaged.Ridill = set_combine(sets.engaged,{})
 		
         sets.engaged.Ridill.Acc  = set_combine(sets.engaged.Ridill,{})
 		
-	sets.engaged.Ridill.Tank = set_combine(sets.engaged.Ridill,{ammo="Bibiki seashell",back="Shadow mantle",ring2="Defending ring"})
+		sets.engaged.Ridill.Tank = set_combine(sets.engaged.Ridill,{ammo="Bibiki seashell",back="Shadow mantle",ring2="Defending ring"})
 	
-	-- Capped shit
-	sets.engaged.Couse = {
-		head="Patroclus's Helm",neck="Peacock Amulet",ear1="Assault Earring",ear2="Cassie Earring",
-		body="Ryl.Kgt. Chainmail",hands="Ryl.Kgt. Mufflers",ring1="Sniper's ring +1",ring2="Rajas Ring",
-		back="Amemet Mantle +1",waist="Velocious Belt",legs="Ryl.Kgt. Breeches",feet="Bounding Boots"}
+		-- Capped shit
+		sets.engaged.Thundercloud = {
+			head="Patroclus's Helm",neck="Peacock Amulet",ear1="Assault Earring",ear2="Cassie Earring",
+			body="Ryl.Kgt. Chainmail",hands="Ryl.Kgt. Mufflers",ring1="Sniper's ring +1",ring2="Rajas Ring",
+			back="Amemet Mantle +1",waist="Velocious Belt",legs="Ryl.Kgt. Breeches",feet="Bounding Boots"}
 
 end
 
@@ -167,34 +154,33 @@ function customize_idle_set(idleSet)
     return idleSet
 end
 
+
+
 -------------------------------------------------------------------------------------------------------------------
--- Weapon type function
+-- Day/Night
 -------------------------------------------------------------------------------------------------------------------
 
-function adjust_melee_groups()
+function job_post_precast(spell,action,spellMap,eventsArgs)
 
-	classes.CustomMeleeGroups:clear()
-	if player.sub_job == 'SAM' then
-		classes.CustomMeleeGroups:append('SAM')
-	end	
+	if daytime and spell.skill == 'WeaponSkill' then
+		if state.Buff['Warrior\'s Charge'] then
+			equip({ear2="Fenrir's earring"})
+		else
+			if state.WeaponskillMode.value == 'Normal' then
+				equip({ear1="Fenrir's earring"})
+			end
+		end
+	elseif spell.skill == 'WeaponSkill' then
+		if state.Buff['Warrior\'s Charge'] then
+			if player.inventory['Bushinomimi'] then
+				equip({ear2="Bushinomimi"})
+			else
+				equip({ear2="Merman's earring"})
+			end
+		end
+	end
+
 end
-
-function job_status_change(new,old)
-
-	if new == "Engaged" then
-	
-		if player.equipment.main == 'Bravura' or player.equipment.main == 'Ragnarok' or player.equipment.main == 'Couse' or player.equipment.main == 'Ridill' then
-            state.CombatWeapon:set(player.equipment.main)
-          else
-            state.CombatWeapon:reset()
-          end
-		adjust_melee_groups()
-	end  	
-end
-
--------------------------------------------------------------------------------------------------------------------
--- Change buff
--------------------------------------------------------------------------------------------------------------------
 
 function job_buff_change(name,gain)
 
@@ -203,37 +189,35 @@ function job_buff_change(name,gain)
 end
 
 -------------------------------------------------------------------------------------------------------------------
--- Sleep
+-- Weapon type function
 -------------------------------------------------------------------------------------------------------------------
+function job_status_change(new,old)
 
-function sleep_swap(name,gain)
+	if new == "Engaged" then
+	
+		if player.equipment.main == 'Bravura' or player.equipment.main == 'Ragnarok' or player.equipment.main == 'Thundercloud' or player.equipment.main == 'Ridill' then
+            state.CombatWeapon:set(player.equipment.main)
+          else
+            state.CombatWeapon:reset()
+          end
+		adjust_melee_groups()
+	end  	
+end
 
-    local neckpiece
+function customize_melee_set(meleeSet)
 
-    if name == 'sleep' then
-        if gain then
-            equip({neck="Berserker's Torque"})
-		add_to_chat("Equipping Berserker Torque")
-        else
-            send_command('gs c update')
-		add_to_chat("Removing Berserker Torque")
-        end
+	if daytime and state.OffenseMode.value == 'Normal' then
+        meleeSet = set_combine(meleeSet,{ear1="Fenrir's earring"})
     end
 
+    return meleeSet
+	
 end
--------------------------------------------------------------------------------------------------------------------
--- Job stuff
--------------------------------------------------------------------------------------------------------------------
 
-function select_default_macro_book()
-        -- Default macro set/book
-	    if player.sub_job == 'SAM' then
-	    	set_macro_page(1, 3)
-		add_to_chat('Main job WAR: Macro Book 1.')
-		add_to_chat('Sub job SAM: Macro Page 1.')
-	    elseif player.sub_job == 'NIN' then
-	    	set_macro_page(3, 3)
-		add_to_chat('Main job WAR: Macro Book 1.')
-		add_to_chat('Sub job NIN: Macro Page 3.')
-	    end
+function adjust_melee_groups()
+
+	classes.CustomMeleeGroups:clear()
+	if player.sub_job == 'SAM' then
+		classes.CustomMeleeGroups:append('SAM')
+	end	
 end

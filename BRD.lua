@@ -1,7 +1,3 @@
--------------------------------------------------------------------------------------------------------------------
--- Setup functions for this job.  Generally should not be modified.
--------------------------------------------------------------------------------------------------------------------
-
 function get_sets()
     mote_include_version = 2
 
@@ -10,12 +6,11 @@ end
 
 
 function job_setup()
+	include('Land-Include.lua')
+	
+	initialize_job()
 
 end
-
--------------------------------------------------------------------------------------------------------------------
--- User setup functions for this job.  Recommend that these be overridden in a sidecar file.
--------------------------------------------------------------------------------------------------------------------
 
 function user_setup()
 	state.OffenseMode:options('Normal')
@@ -27,8 +22,7 @@ function user_setup()
 	state.RestingMode:options('Normal')
 	state.PhysicalDefenseMode:options('PDT')
 	state.MagicalDefenseMode:options('MDT')
-	
-        select_default_macro_book()
+
 end
 
 
@@ -37,73 +31,71 @@ function user_unload()
 end
 
 function init_gear_sets()
-	--------------------------------------
-        -- Start defining the sets
-        --------------------------------------
         
         -- Misc
-	sets.MND = {
-		main="Chatoyant Staff",sub="Bugard Strap +1",
-		head="Choral roundlet",neck="Holy phial",ear1="Mamool Ja earring",ear2="Star earring",
-		body="Kirin's osode"  ,hands="Bricta's cuffs",ring1="Star ring",ring2="Tamas ring",
-		back="Prism cape",waist="Steppe rope",legs="Mahatma slops",feet="Suzaku's sune-ate"}
+		sets.MND = {
+			main="Chatoyant Staff",sub="Bugard Strap +1",
+			head="Choral roundlet",neck="Holy phial",ear1="Mamool Ja earring",ear2="Star earring",
+			body="Kirin's osode"  ,hands="Bricta's cuffs",ring1="Star ring",ring2="Tamas ring",
+			back="Prism cape",waist="Steppe rope",legs="Mahatma slops",feet="Suzaku's sune-ate"}
 		
-	sets.CHR = {
+		sets.CHR = {
 		range="Gjallarhorn",
 		head="Bard's roundlet +1" ,neck="Piper's torque",ear1="Melody Earring +1",ear2="Musical Earring",
 		body="Kirin's osode",hands="Choral cuffs +1",ring1="Light ring",ring2="Light ring",
 		back="Jester's cape +1",waist="Corsette",legs="Mahatma slops",feet="Sha'ir crackows"}
 		
-	sets.obi = {
-		Fire      = {waist="Karin Obi"},
-		Earth     = {waist="Dorin Obi"},
-		Water     = {waist="Suirin Obi"},
-		Wind      = {waist="Furin Obi"},
-		Ice       = {waist="Hyorin Obi"},
-		Lightning = {waist="Rairin Obi"},
-		Light     = {waist="Korin Obi"},
-		Dark	  = {waist="Anrin Obi"}}
+		sets.obi = {
+			Fire      = {waist="Karin Obi"},
+			Earth     = {waist="Dorin Obi"},
+			Water     = {waist="Suirin Obi"},
+			Wind      = {waist="Furin Obi"},
+			Ice       = {waist="Hyorin Obi"},
+			Lightning = {waist="Rairin Obi"},
+			Light     = {waist="Korin Obi"},
+			Dark	  = {waist="Anrin Obi"}}
 															 	   
-	sets.grip = {
-		Fire 	  = {sub="Fire Grip"},
-		Earth 	  = {sub="Earth Grip"},
-		Water 	  = {sub="Water Grip"},
-		Wind 	  = {sub="Wind Grip"},
-		Ice 	  = {sub="Ice Grip"},
-		Lightning = {sub="Lightning Grip"},
-		Light 	  = {sub="Light Grip"},
-		Dark 	  = {sub="Dark Grip"}}
+		sets.grip = {
+			Fire 	  = {sub="Fire Grip"},
+			Earth 	  = {sub="Earth Grip"},
+			Water 	  = {sub="Water Grip"},
+			Wind 	  = {sub="Wind Grip"},
+			Ice 	  = {sub="Ice Grip"},
+			Lightning = {sub="Lightning Grip"},
+			Light 	  = {sub="Light Grip"},
+			Dark 	  = {sub="Dark Grip"}}
 
         -- Precast Sets
-	sets.precast.FC = {ear2="Loquacious Earring",feet="Rostrum pumps"}
+		sets.precast.FC = {ear2="Loquacious Earring",feet="Rostrum pumps"}
         sets.precast.FC['BardSong'] = set_combine(sets.precast.FC,{body="Sheikh Manteel"})
         
         -- Midcast Sets
         sets.midcast['BardSong'] = set_combine(sets.CHR,{
+		ear2="Musical Earring",
 		body="Minstrel's Coat",hands="Chl. Cuffs +1",ring1="Nereid Ring",ring2="Nereid Ring",
 		legs="Chl. Cannions +1",feet="Oracle's Pigaches"})
 		
-	sets.midcast['Lullaby'] = set_combine(sets.midcast['Lullaby'],{
-		sub="Light Grip",
-		body="Minstrel's Coat",hands="Brd. Cuffs +1",ring1="Nereid Ring",ring2="Nereid Ring",
-		legs="Choral Cannions",feet="Oracle's Pigaches"})
+		sets.midcast['Lullaby'] = set_combine(sets.midcast['Lullaby'],{
+			sub="Light Grip",
+			body="Minstrel's Coat",hands="Brd. Cuffs +1",ring1="Nereid Ring",ring2="Nereid Ring",
+			legs="Choral Cannions",feet="Oracle's Pigaches"})
 	
-	sets.midcast['Magic Finale'] = set_combine(sets.midcast['Lullaby'],{
-		body="Minstrel's Coat",hands="Brd. Cuffs +1",ring1="Nereid Ring",ring2="Nereid Ring",
-		legs="Choral Cannions",feet="Oracle's Pigaches"})
+		sets.midcast['Magic Finale'] = set_combine(sets.midcast['Lullaby'],{
+			body="Minstrel's Coat",hands="Brd. Cuffs +1",ring1="Nereid Ring",ring2="Nereid Ring",
+			legs="Choral Cannions",feet="Oracle's Pigaches"})
 	
-	sets.midcast['Elegy'] = set_combine(sets.midcast['Lullaby'],{
-		sub="Earth Grip",
-		body="Minstrel's Coat",hands="Brd. Cuffs +1",ring1="Nereid Ring",ring2="Nereid Ring",
-		legs="Choral Cannions",feet="Oracle's Pigaches"})
+		sets.midcast['Elegy'] = set_combine(sets.midcast['Lullaby'],{
+			sub="Earth Grip",
+			body="Minstrel's Coat",hands="Brd. Cuffs +1",ring1="Nereid Ring",ring2="Nereid Ring",
+			legs="Choral Cannions",feet="Oracle's Pigaches"})
 	
-	sets.midcast['Requiem'] = set_combine(sets.midcast['Lullaby'],{
-		body="Minstrel's Coat",hands="Brd. Cuffs +1",ring1="Nereid Ring",ring2="Nereid Ring",
-		legs="Choral Cannions",feet="Oracle's Pigaches"})
+		sets.midcast['Requiem'] = set_combine(sets.midcast['Lullaby'],{
+			body="Minstrel's Coat",hands="Brd. Cuffs +1",ring1="Nereid Ring",ring2="Nereid Ring",
+			legs="Choral Cannions",feet="Oracle's Pigaches"})
 	
-	sets.midcast['Threnody'] = set_combine(sets.midcast['Lullaby'],{
-		body="Minstrel's Coat",hands="Brd. Cuffs +1",ring1="Nereid Ring",ring2="Nereid Ring",
-		legs="Choral Cannions",feet="Oracle's Pigaches"})
+		sets.midcast['Threnody'] = set_combine(sets.midcast['Lullaby'],{
+			body="Minstrel's Coat",hands="Brd. Cuffs +1",ring1="Nereid Ring",ring2="Nereid Ring",
+			legs="Choral Cannions",feet="Oracle's Pigaches"})
         
         sets.midcast.Cure = {main="Chatoyant Staff",
 	        head="Walahra Turban",neck="Fylgja Torque +1",ear1="Novia Earring",ear2="Geist Earring",
@@ -140,15 +132,14 @@ function init_gear_sets()
         	head="Walahra Turban",neck="Chocobo whistle",
         	body="Dalmatica",ring1="Vivian Ring",ring2="Tamas Ring"}
         	
-	sets.idle.Town = set_combine(sets.idle,{ring1="Warp ring",back="Nexus cape"})
+		sets.idle.Town = set_combine(sets.idle,{ring1="Warp ring",back="Nexus cape"})
 		
-	-- Resting sets
-	sets.resting = {
-		main="Chatoyant Staff",
-		head="Mirror Tiara",ear1="Relaxing Earring",
-		body="Oracle's Robe",hands="Oracle's Gloves",ring1="Star Ring",ring2="Star Ring",
-		waist="Qiqirn Sash",legs="Oracle's Braconi",feet="Numerist Pumps"
-		}
+		-- Resting sets
+		sets.resting = {
+			main="Chatoyant Staff",
+			head="Mirror Tiara",ear1="Magnetic Earring",ear2="Relaxing Earring",
+			body="Oracle's Robe",hands="Oracle's Gloves",ring1="Star Ring",ring2="Star Ring",
+			waist="Qiqirn Sash",legs="Oracle's Braconi",feet="Numerist Pumps"}
         
         -- Defense sets
         sets.defense.PDT = {}
@@ -156,18 +147,8 @@ function init_gear_sets()
         sets.defense.MDT = {}
         
         sets.Kiting = {feet="Blood Cuisses"}
-        
-        -- Souleater set
-        sets.SE = {head="Chaos Burgeonet"}
 
         -- Engaged sets
-
-        -- Variations for TP weapon and (optional) offense/defense modes. Code will fall back on previous
-        -- sets if more refined versions aren't defined.
-        -- If you create a set with both offense and defense modes, the offense mode should be first.
-        -- EG: sets.engaged.Dagger.Accuracy.Evasion
-        
-        -- Normal melee group
         sets.engaged = {
 		head="Walahra Turban",neck="Peacock Amulet",ear1="Assault Earring",ear2="Fowling Earring",
 		body="Demon's Harness",hands="Dusk Gloves",ring1="Sniper's Ring +1",ring2="Sniper's Ring",
@@ -180,7 +161,7 @@ end
 -------------------------------------------------------------------------------------------------------------------
 
 function job_post_midcast(spell, action, spellMap, eventArgs)
-	-- Apply Obi
+
 	if spell.skill == 'Elemental Magic' then 
 		if spell.element == world.weather_element or spell.element == world.day_element then
 			equip(sets.obi[spell.element])
@@ -203,21 +184,4 @@ function job_status_change(new,old)
 		enable("main","sub","range","ammo")
 	end
 
-end
-
--------------------------------------------------------------------------------------------------------------------
--- Job stuff
--------------------------------------------------------------------------------------------------------------------
-
-function select_default_macro_book()
-        -- Default macro set/book
-	    if player.sub_job == 'WHM' then
-	    	set_macro_page(1, 1)
-		add_to_chat('Main job BRD: Macro Book 1.')
-		add_to_chat('Sub job WHM: Macro Page 1.')
-	    elseif player.sub_job == 'NIN' then
-	    	set_macro_page(3, 1)
-		add_to_chat('Main job BRD: Macro Book 1.')
-		add_to_chat('Sub job NIN: Macro Page 3.')
-	    end
 end

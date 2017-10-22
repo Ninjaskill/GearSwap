@@ -1,26 +1,18 @@
--------------------------------------------------------------------------------------------------------------------
--- Setup functions for this job.  Generally should not be modified.
--------------------------------------------------------------------------------------------------------------------
-
--- Initialization function for this job file.
 function get_sets()
     mote_include_version = 2
 
-	-- Load and initialize the include file.
 	include('Mote-Include.lua')
 end
 
 
--- Setup vars that are user-independent.  state.Buff vars initialized here will automatically be tracked.
 function job_setup()
+	
+	include('Land-Include.lua')
+	
+	initialize_job()
 
 end
 
--------------------------------------------------------------------------------------------------------------------
--- User setup functions for this job.  Recommend that these be overridden in a sidecar file.
--------------------------------------------------------------------------------------------------------------------
-
--- Setup vars that are user-dependent.  Can override this function in a sidecar file.
 function user_setup()
 	state.OffenseMode:options('Normal')
 	state.RangedMode:options('Normal')
@@ -33,21 +25,15 @@ function user_setup()
 	state.MagicalDefenseMode:options('MDT')
 	
 	send_command('bind f9 gs c cycle CastingMode')
-	
-        select_default_macro_book()
+
 end
 
 
--- Called when this job file is unloaded (eg: job change)
 function user_unload()
 
 end
 
 function init_gear_sets()
-
-	--------------------------------------
-        -- Start defining the sets
-        --------------------------------------
         
         -- Precast Sets
         
@@ -132,7 +118,7 @@ function init_gear_sets()
 	-- Resting sets
 	sets.resting = {
 		main="Chatoyant Staff",
-		head="Mirror Tiara",ear1="Relaxing Earring",
+		head="Oracle's Cap",ear1="Magnetic Earring",ear2="Relaxing Earring",
 		body="Oracle's Robe",hands="Oracle's Gloves",ring1="Star Ring",ring2="Star Ring",
 		waist="Qiqirn Sash",legs="Oracle's Braconi",feet="Numerist Pumps"
 		}
@@ -182,21 +168,4 @@ function midcast(spell)
             equip({neck="Uggalepih Pendant"})
         end
     end      -- end elemental magic
-end
-
--------------------------------------------------------------------------------------------------------------------
--- Job stuff
--------------------------------------------------------------------------------------------------------------------
-
-function select_default_macro_book()
-        -- Default macro set/book
-	    if player.sub_job == 'RDM' then
-	    	set_macro_page(1, 3)
-		add_to_chat('Main job BLM: Macro Book 1.')
-		add_to_chat('Sub job RDM: Macro Page 1.')
-	    elseif player.sub_job == 'THF' then
-	    	set_macro_page(1, 3)
-		add_to_chat('Main job BLM: Macro Book 1.')
-		add_to_chat('Sub job THF: Macro Page 1.')
-	    end
 end

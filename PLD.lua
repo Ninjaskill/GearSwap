@@ -1,7 +1,3 @@
--------------------------------------------------------------------------------------------------------------------
--- Setup functions for this job.  Generally should not be modified.
--------------------------------------------------------------------------------------------------------------------
-
 function get_sets()
     mote_include_version = 2
 
@@ -9,9 +5,12 @@ function get_sets()
 end
 
 
--------------------------------------------------------------------------------------------------------------------
--- User setup functions for this job.  Recommend that these be overridden in a sidecar file.
--------------------------------------------------------------------------------------------------------------------
+function job_setup()
+
+		include('Land-Include.lua')
+		
+		initialize_job()
+end
 
 function user_setup()
 	state.OffenseMode:options('Normal','FullTank','DPS')
@@ -19,8 +18,7 @@ function user_setup()
 	state.CastingMode:options('Normal','Acc')
 	state.PhysicalDefenseMode:options('PDT')
 	state.MagicalDefenseMode:options('MDT')
-        
-        select_default_macro_book()	
+
 end
 
 
@@ -30,10 +28,6 @@ end
 
 function init_gear_sets()
 
-	--------------------------------------
-        -- Start defiShadowsg the sets
-        --------------------------------------
-        
         -- Precast Sets
         
 			
@@ -80,11 +74,11 @@ function init_gear_sets()
 		
         -- Idle sets
         sets.idle = {
-        	head="Koenig Schaller",neck="Chocobo whistle",ear1="Bloodbead Earring",ear2="Cassie Earring",
-		body="Valhalla Breastplate",hands="Homam Manopolas",ring1="Jelly Ring",ring2="Bloodbead Ring",
-		back="Shadow Mantle",waist="Velocious Belt",legs="Blood Cuisses"}
+        	head="Koenig Schaller",neck="Chocobo whistle",ear1="Ethereal Earring",ear2="Cassie Earring",
+			body="Valhalla Breastplate",hands="Homam Manopolas",ring1="Jelly Ring",ring2="Bloodbead Ring",
+			back="Shadow Mantle",waist="Velocious Belt",legs="Blood Cuisses"}
 		
-	sets.idle.Town = set_combine(sets.idle,{ring1="Warp ring",back="Nexus cape"})
+		sets.idle.Town = set_combine(sets.idle,{ring1="Warp ring",back="Nexus cape"})
 			
         sets.PDT = {}
 		
@@ -140,32 +134,32 @@ function init_gear_sets()
 	-- Excalibur engaged (NIN)
         sets.engaged.Excalibur.NIN = {
 		ammo="Bibiki Seashell",
-		head="Walahra Turban",neck="Ritter Gorget",ear1="Ethereal Earring",ear2="Hade's Earring +1",
+		head="Walahra Turban",neck="Ritter Gorget",ear1="Ethereal Earring",ear2="Cassie Earring +1",
 		body="Valhalla Breastplate",hands="Homam Monapolas",ring1="Bloodbead Ring",ring2="Hercules' Ring",
 		back="Cerberus Mantle +1",waist="Velocious Belt",legs="Homam Cosciales",feet="Homam Gambieras"}
 		
         sets.engaged.Excalibur.NIN.FullTank = {
 		ammo="Bibiki Seashell",
-		head="Walahra Turban",neck="Ritter Gorget",ear1="Cassie Earring",ear2="Brutal Earring",
+		head="Walahra Turban",neck="Ritter Gorget",ear1="Ethereal Earring",ear2="Cassie Earring",
 		body="Valhalla Breastplate",hands="Dusk Gloves +1",ring1="Bloodbead Ring",ring2="Hercules' Ring",
 		back="Cerberus Mantle +1",waist="Velocious Belt",legs="Homam Cosciales",feet="Homam Gambieras"}
 		
         sets.engaged.Excalibur.NIN.DPS = {
 		ammo="Bibiki Seashell",
-		head="Walahra Turban",neck="Ritter Gorget",ear1="Cassie Earring",ear2="Brutal Earring",
+		head="Walahra Turban",neck="Ritter Gorget",ear1="Assault Earring",ear2="Brutal Earring",
 		body="Valhalla Breastplate",hands="Dusk Gloves +1",ring1="Bloodbead Ring",ring2="Hercules' Ring",
 		back="Cerberus Mantle +1",waist="Velocious Belt",legs="Homam Cosciales",feet="Homam Gambieras"}
 		
 		
-	-- Hrotti engaged (normal)
-	sets.engaged.Hrotti = set_combine(sets.engaged,{body="Crm. Scale Mail",back="Cerberus Mantle +1",legs="Blood Cuisses"})
+		-- Hrotti engaged (normal)
+		sets.engaged.Hrotti = set_combine(sets.engaged,{body="Crm. Scale Mail",back="Cerberus Mantle +1",legs="Blood Cuisses"})
 		
-	sets.engaged.Hrotti.FullTank = set_combine(sets.engaged.FullTank,{body="Crimson Mail",back="Cerberus Mantle +1",legs="Blood Cuisses"})
+		sets.engaged.Hrotti.FullTank = set_combine(sets.engaged.FullTank,{body="Crimson Mail",back="Cerberus Mantle +1",legs="Blood Cuisses"})
 	
-	-- Hrotti engaged (NIN)
-	sets.engaged.Hrotti.NIN = set_combine(sets.engaged.NIN,{body="Crimson Mail",back="Cerberus Mantle +1",legs="Blood Cuisses"})
+		-- Hrotti engaged (NIN)
+		sets.engaged.Hrotti.NIN = set_combine(sets.engaged.NIN,{body="Crimson Mail",back="Cerberus Mantle +1",legs="Blood Cuisses"})
 		
-	sets.engaged.Hrotti.FullTank.NIN = set_combine(sets.engaged.Hrotti.NIN,{})
+		sets.engaged.Hrotti.FullTank.NIN = set_combine(sets.engaged.Hrotti.NIN,{})
 
 
 
@@ -178,15 +172,14 @@ end
 function customize_idle_set(idleSet)
     if player.mpp < 70 and player.hpp >= 85 then
         idleSet = set_combine(idleSet,{neck="Parade gorget",body="Royal Cloak"})
-		if player.hpp < 50 then
-			idleSet = set_combine(idleSet,{ring2="Hercules' ring"})
-		end
-    elseif player.hpp < 70 then
+	end
+    if player.hpp < 70 then
         idleSet = set_combine(idleSet,{neck="Orochi nodowa"})
     end
+	if player.hpp < 50 then
+			idleSet = set_combine(idleSet,{ring2="Hercules' ring"})
+	end
     return idleSet
-   end
-end
 end
 
 -------------------------------------------------------------------------------------------------------------------
@@ -226,40 +219,4 @@ function job_buff_change(name,gain)
 		handle_equipping_gear(player.status)
 	end
 	
-end
-
--------------------------------------------------------------------------------------------------------------------
--- Sleep
--------------------------------------------------------------------------------------------------------------------
-
-function sleep_swap(name,gain)
-
-    local neckpiece
-
-    if name == 'sleep' then
-        if gain then
-            equip({neck="Berserker's Torque"})
-		add_to_chat("Equipping Berserker Torque")
-        else
-            send_command('gs c update')
-		add_to_chat("Removing Berserker Torque")
-        end
-    end
-
-end
--------------------------------------------------------------------------------------------------------------------
--- Job stuff
--------------------------------------------------------------------------------------------------------------------
-
-function select_default_macro_book()
-        -- Default macro set/book
-	    if player.sub_job == 'WAR' then
-	    	set_macro_page(1, 4)
-		add_to_chat('Main job PLD: Macro Book 1.')
-		add_to_chat('Sub job WAR: Macro Page 1.')
-	    elseif player.sub_job == 'NIN' then
-	    	set_macro_page(3, 4)
-		add_to_chat('Main job PLD: Macro Book 1.')
-		add_to_chat('Sub job NIN: Macro Page 3.')
-	    end
 end
